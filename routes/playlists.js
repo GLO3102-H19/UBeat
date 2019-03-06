@@ -211,8 +211,12 @@ exports.removePlaylistUnsecure = async function (req, res) {
 }
 
 exports.getPlaylists = async function (req, res) {
+  if (!req.query.userId) {
+    res.status(400).send("Please provide userId query param");
+    return;
+  }
   try {
-    const playlists = await Playlist.find({"owner.id": req.body.userId})
+    const playlists = await Playlist.find({"owner.id": req.query.userId})
     res.status(200).send(playlists || [])
   } catch (err) {
     console.log(err)
