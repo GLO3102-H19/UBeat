@@ -3,7 +3,7 @@ const User = require('../models/user').model
 const Track = require('../models/track').model
 const _ = require('underscore')
 
-exports.createPlaylist = async function(req, res) {
+exports.createPlaylist = async function (req, res) {
   try {
     const user = await User.findById(req.user.id)
     const playlist = new Playlist({
@@ -19,7 +19,7 @@ exports.createPlaylist = async function(req, res) {
 }
 
 // Unsecure (Will be removed after release 2)
-exports.createPlaylistUnsecure = async function(req, res) {
+exports.createPlaylistUnsecure = async function (req, res) {
   if (!req.body.owner || !req.body.name) {
     res(400).send({
       errorCode: 'BAD_REQUEST',
@@ -28,7 +28,7 @@ exports.createPlaylistUnsecure = async function(req, res) {
     })
   }
   try {
-    const user = await User.findOne({ email: req.body.owner })
+    const user = await User.findOne({email: req.body.owner})
     if (user) {
       const playlist = new Playlist({
         name: req.body.name,
@@ -48,7 +48,7 @@ exports.createPlaylistUnsecure = async function(req, res) {
   }
 }
 
-exports.addTrackToPlaylist = async function(req, res) {
+exports.addTrackToPlaylist = async function (req, res) {
   try {
     const playlist = await Playlist.findById(req.params.id)
     if (playlist) {
@@ -82,12 +82,12 @@ exports.addTrackToPlaylist = async function(req, res) {
   }
 }
 
-exports.removeTrackFromPlaylist = async function(req, res) {
+exports.removeTrackFromPlaylist = async function (req, res) {
   try {
     const playlist = await Playlist.findById(req.params.playlistId)
     if (playlist) {
       const trackToRemove = playlist.tracks
-        .filter(function(track) {
+        .filter(function (track) {
           return track.trackId == req.params.trackId
         })
         .pop()
@@ -121,7 +121,7 @@ exports.removeTrackFromPlaylist = async function(req, res) {
   }
 }
 
-exports.updatePlaylist = async function(req, res) {
+exports.updatePlaylist = async function (req, res) {
   try {
     const playlist = await Playlist.findById(req.params.id)
     if (playlist) {
@@ -148,7 +148,7 @@ exports.updatePlaylist = async function(req, res) {
   }
 }
 
-exports.removePlaylist = async function(req, res) {
+exports.removePlaylist = async function (req, res) {
   try {
     const playlist = await Playlist.findById(req.params.id)
     if (playlist) {
@@ -183,7 +183,7 @@ exports.removePlaylist = async function(req, res) {
 }
 
 // Unsecure (Will be removed after release 2)
-exports.removePlaylistUnsecure = async function(req, res) {
+exports.removePlaylistUnsecure = async function (req, res) {
   try {
     const playlist = await Playlist.findById(req.params.id)
     if (playlist) {
@@ -210,9 +210,9 @@ exports.removePlaylistUnsecure = async function(req, res) {
   }
 }
 
-exports.getPlaylists = async function(req, res) {
+exports.getPlaylists = async function (req, res) {
   try {
-    const playlists = await Playlist.find({})
+    const playlists = await Playlist.find({"owner.id": req.body.userId})
     res.status(200).send(playlists || [])
   } catch (err) {
     console.log(err)
@@ -220,7 +220,7 @@ exports.getPlaylists = async function(req, res) {
   }
 }
 
-exports.findPlaylistById = async function(req, res) {
+exports.findPlaylistById = async function (req, res) {
   try {
     const playlist = await Playlist.findById(req.params.id)
     if (playlist) {
