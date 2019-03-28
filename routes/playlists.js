@@ -54,6 +54,7 @@ exports.addTrackToPlaylist = async function (req, res) {
     if (playlist) {
       if (req.body) {
         const track = new Track(req.body)
+        console.log(track);
         playlist.tracks.push(track.toJSON())
         playlist.save()
         res.status(200).send(playlist)
@@ -211,12 +212,12 @@ exports.removePlaylistUnsecure = async function (req, res) {
 }
 
 exports.getPlaylists = async function (req, res) {
-  if (!req.query.userId) {
-    res.status(400).send("Please provide userId query param");
+  if (!req.query.email) {
+    res.status(400).send("Please provide user email as query param (e.g. ?email={{email}}");
     return;
   }
   try {
-    const playlists = await Playlist.find({"owner.id": req.query.userId})
+    const playlists = await Playlist.find({"owner.email": req.query.email})
     res.status(200).send(playlists || [])
   } catch (err) {
     console.log(err)

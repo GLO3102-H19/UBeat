@@ -43,7 +43,7 @@ require('./middleware/passport')(passport, app)
 
 app.use(cookieParser())
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(
   session({
     secret: 'ubeat_session_secret',
@@ -57,7 +57,7 @@ app.use(flash())
 app.use(cors(corsOptions))
 app.use(express.static(__dirname + '/public'))
 
-app.use(function(error, req, res, next) {
+app.use(function (error, req, res, next) {
   if (error instanceof SyntaxError) {
     res.status(412).send({
       errorCode: 'PARSE_ERROR',
@@ -140,3 +140,5 @@ app.put('/unsecure/playlists/:id', playlist.updatePlaylist)
 
 const port = process.env.PORT || 3000
 app.listen(port)
+
+console.log(`Running on port ${port}`)
